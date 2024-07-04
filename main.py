@@ -2,15 +2,58 @@ import random
 
 LINES = 5
 ROWS = 5
-COLS = 5
+COLUMNS = 5
 
 symbols = {
-  "A":1
-  "B":3
-  "C":4
-  "D":5
+  "A": 1,
+  "B": 3,
+  "C": 4,
+  "D": 5
+}
+#symbolValue is the reward multiplier
+symbolValue = {
+  "A": 5,
+  "B": 4,
+  "C": 3,
+  "D": 1
 }
 
+def checkWins(column, lines, bet):
+  for line in range(lines):
+    symbol = columns[0][line]
+    for column in columns:
+      symbolCheck = column[line]
+      if symbol != symbolCheck:
+        break
+    else:
+      
+
+def getSpin(rows, cols, symbols):
+  allSymbols = []
+  for symbol, symbolCount in symbols.items():
+    allSymbols.extend([symbol]* symbolCount)
+    #for i in range (symbolCount):
+      #allSymbols.append(symbol)
+
+  columns = []
+  for c in range(cols):
+    column = []
+    currentSymbols = allSymbols[:]
+    for row in range(rows):
+      value = random.choice(allSymbols)
+      column.append(value)
+    columns.append(column)
+  return columns
+
+def slotMachine(columns):
+  for row in range(len(columns[0])):
+    for i, column in enumerate(columns):
+      if i != len(columns) - 1:
+        print(column[row], " | ", end= " ")
+      else:
+        print(column[row], end = "")
+    print()
+    
 def gambling101():
   while True:
     moneyInput = input("How much money would you like to gamble away (you're going to lose it)?")
@@ -23,7 +66,6 @@ def gambling101():
     else:
       print ("Put in an number please.")
 
-  print(type(moneyInput))
   return moneyInput
 
 def numbaLines():
@@ -66,6 +108,8 @@ def main():
     else:
       break
   print (f"You're betting ${bet} on {line} lines. Your total bet is ${betTotal}")
+  slots = getSpin(ROWS, COLUMNS, symbols)
+  slotMachine(slots)
 
 main()
 
