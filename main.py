@@ -18,14 +18,20 @@ symbolValue = {
   "D": 1
 }
 
-def checkWins(column, lines, bet):
+def checkWins(columns, lines, bet, values):
+  winnings = 0
+  winLines = []
   for line in range(lines):
     symbol = columns[0][line]
     for column in columns:
       symbolCheck = column[line]
+      # if all values are not the same symbol, break
       if symbol != symbolCheck:
         break
     else:
+      winnings += values[symbol] * bet
+      winLines.append(line + 1)
+  return winnings, winLines
       
 
 def getSpin(rows, cols, symbols):
@@ -94,10 +100,9 @@ def betNumba():
     else:
       print ("Put in an number please.")
 
-  print(type(moneyInput))
   return moneyInput
-  
-def main():
+
+def game():
   balance = gambling101()
   line = numbaLines()
   while True:
@@ -110,6 +115,26 @@ def main():
   print (f"You're betting ${bet} on {line} lines. Your total bet is ${betTotal}")
   slots = getSpin(ROWS, COLUMNS, symbols)
   slotMachine(slots)
-
+  winnings, winLines = checkWins(slots, line, bet, symbolValue)
+  print(f"You won ${winnings}.")
+  if winnings > 0:
+    print(f"You won on lines:", *winLines)
+  else:
+    print("You lost, womp womp!")
+  return winnings - betTotal
+  
+def main():
+  balance = gambling101()
+  while True:
+    print(f"Current balance is ${balance}.")
+    play = input("Press enter to play (q to quit).")
+    if play == "q":
+      break
+    balance += game()
+  if balance > 0:
+    print(f"You are leaving with ${balance}")
+  else:
+    print("You are broke, you are a brokie, womp womp")
+  
 main()
 
